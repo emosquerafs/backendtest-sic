@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: TestSic
+  output:
+    ansi:
+      enabled: always
+  profiles:
+    active: local
+  config:
+    location: ./src/main/resources
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+server:
+  servlet:
+    context-path: /api/sic
+  port: 8081
+project:
+  version: 0.0.1

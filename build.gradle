@@ -1,0 +1,81 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'co.gov.sic'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation ('org.springframework.boot:spring-boot-starter-web'){
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+
+    implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate6:2.18.2'
+    implementation group: 'org.jetbrains', name: 'annotations', version: '24.1.0'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-vault-config', version: '4.2.1'
+    implementation("org.springframework.boot:spring-boot-starter-tomcat:3.4.4")
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation("org.springframework.security:spring-security-core:6.4.4")
+
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server:3.4.4")
+
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+    implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
+
+
+    compileOnly 'org.projectlombok:lombok'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.register("getVersion") {
+    group = 'application'
+    description = 'Displays the project version from build.gradle and application.yaml'
+
+    doFirst {
+        def yamlFile = file('src/main/resources/application.yaml')
+        if (yamlFile.exists()) {
+            def yamlContent = yamlFile.text
+            def versionMatch = yamlContent =~ /project:\s*\n\s*version:\s*([^\n]+)/
+            if (versionMatch.find()) {
+                println "SingularItVersion ${versionMatch[0][1]}"
+            } else {
+                println "Project version not found in application.yaml"
+            }
+        }
+    }
+}
