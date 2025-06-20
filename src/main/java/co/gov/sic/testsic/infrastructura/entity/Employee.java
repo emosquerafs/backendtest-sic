@@ -1,6 +1,7 @@
 package co.gov.sic.testsic.infrastructura.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -44,6 +45,8 @@ public class Employee {
     private Instant updatedAt;
 
     @OneToMany(mappedBy = "receivedBy")
+    @JsonManagedReference(value = "receivedBy-procedures")
     private Set<Procedure> procedures = new LinkedHashSet<>();
+
 
 }

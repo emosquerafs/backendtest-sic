@@ -1,6 +1,7 @@
 package co.gov.sic.testsic.infrastructura.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,6 +57,8 @@ public class Person {
     private Set<Employee> employees = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "submittedBy")
+    @JsonManagedReference(value = "submittedBy-procedures")
     private Set<Procedure> procedures = new LinkedHashSet<>();
+
 
 }

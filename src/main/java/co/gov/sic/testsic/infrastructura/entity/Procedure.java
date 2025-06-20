@@ -1,5 +1,6 @@
 package co.gov.sic.testsic.infrastructura.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,11 +33,15 @@ public class Procedure {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "submitted_by_id", nullable = false)
+    @JsonBackReference(value = "submittedBy-procedures")
     private Person submittedBy;
+
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "received_by_id", nullable = false)
+    @JsonBackReference(value = "receivedBy-procedures")
     private Employee receivedBy;
+
 
     @ColumnDefault("now()")
     @Column(name = "created_at")
