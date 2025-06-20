@@ -7,5 +7,5 @@ if [[ ! -f "$JAR_FILE" ]]; then
   echo "Error: JAR file '$JAR_FILE' not found."
   exit 1
 fi
-cd /etc/singularit/ || exit
+cd /etc/sic/ || exit
 java -jar "$JAR_FILE" --spring.config.name=application

@@ -16,11 +16,9 @@ RUN gradle --refresh-dependencies --no-daemon
 RUN gradle clean build -x test
 
 FROM debian:stable-slim
-ARG BUILD_VERSION
-ARG BINARY_NAME
+
 ENV TZ=America/Bogota
-ENV VERSION=$BUILD_VERSION
-ENV BINARY_NAME=$BINARY_NAME
+ENV VAULT_TOKEN=root
 
 RUN apt-get update && apt-get install -y libc6
 
@@ -34,7 +32,7 @@ RUN set -ex; \
     mkdir -p /usr/local/jvm/java;
 
 COPY --from=build /home/gradle/*.yaml /etc/sic/config/
-COPY --from=build /home/gradle/build/libs/${BINARY_NAME}-${VERSION}.jar /etc/sic/${BINARY_NAME}-${VERSION}.jar
+COPY --from=build /home/gradle/build/libs/TestSic-0.0.1.jar /etc/sic/TestSic-0.0.1.jar
 COPY --from=build /home/gradle/sic-run.sh /usr/local/bin
 COPY --from=build  /usr/local/jvm/*  /usr/local/jvm/java
 
@@ -58,6 +56,6 @@ ENV PATH=$PATH:${JAVA_HOME}/bin
 USER sic:sic
 WORKDIR /etc/sic
 
-ENTRYPOINT ["/bin/bash", "-c", "/usr/local/bin/sic-run.sh ${BINARY_NAME}-${VERSION}.jar"]
+ENTRYPOINT ["/bin/bash", "-c", "/usr/local/bin/sic-run.sh TestSic-0.0.1.jar"]
 
 EXPOSE 8080
